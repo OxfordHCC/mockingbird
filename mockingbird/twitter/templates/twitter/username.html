@@ -1,0 +1,25 @@
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="/static/twitter/style.css?{% now 'U' %}">
+</head>
+<body>
+    <strong> Gathered the following Tweets for @{{username}}: </strong>
+    <br>
+    <br>
+    <a class="page_button" href="{% url 'twitter:index'%}">Not your username?</a>
+    <a class="page_button" href="{% url 'twitter:profile' username%}">Take me to my profiles</a>
+    <br>
+    <br>
+
+    <div class="tweet_list">
+        {% for tweet in tweets %}
+        <a><strong>{{ forloop.counter }})</strong> {{tweet}}</a>
+            <br>
+            <br>
+        {% endfor %}
+    </div>
+
+    <br>
+    <a class="page_button" href="{% url 'twitter:index' %}">Not your username?</a>
+    <a class="page_button" href="{% url 'twitter:profile' username%}">Take me to my profiles</a>
+</body>

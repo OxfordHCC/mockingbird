@@ -1,0 +1,23 @@
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="/static/twitter/style.css?{% now 'U' %}">
+</head>
+
+<body>
+    <div><strong>Hello! Please enter your Twitter username below:</strong></div>
+    <br>
+    <form name="username_form" action="{% url 'twitter:username' %}" method="post">
+        {% csrf_token %}
+        <img class="at_sign" src="../../static/twitter/images/at_sign.png" alt="@">
+        {{ form.username }}
+        <br>
+        <br>
+        <strong>Number of Tweets (Multiple of 20):</strong>
+        {{form.no_tweets}}
+        <br>
+        <br>
+        <strong>Profile Sensitive Characteristics:</strong>
+        {{form.use_sensitive}}
+        <button class="submit_button" style="position:relative; bottom:2px;">Get my Tweets</button>
+    </form>
+</body>

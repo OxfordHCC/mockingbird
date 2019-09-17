@@ -1,0 +1,10 @@
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="/static/twitter/style.css?{% now 'U' %}">
+</head>
+<body>
+    No results found for username @{{username}}
+    <br>
+    <br>
+    <a class="page_button" href="{% url 'twitter:index'%}">Try again?</a>
+</body>

@@ -1,0 +1,66 @@
+<head>
+    {% load multifor %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="/static/twitter/style.css?{% now 'U' %}">
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-1.2.0.min.js"></script>
+    {{script|safe}}
+    {% load twitter_tags %}
+</head>
+<body>
+        <div><strong>Making your profile look {{target}}</strong></div>
+        <br>
+<div style="text-align:left;font-size:16px;column-count:3">
+    <div style="break-after:column;font-size:16px;">
+    <strong>Current Class:</strong> {{original_profile.predicted_class|title}}
+    <br>
+        {% if is_categorical %}
+    <strong>Probability of Predicted Class:</strong> {% float_to_percent top_confidence %}
+        {% endif %}
+        </div>
+</div>
+<br>
+Edit your Tweets below! To remove a Tweet entirely, just leave that section blank. Click submit to see your new {{attr}}
+        profile. Click Next ten Tweets or Previous ten Tweets to submit these changes and load more Tweets to edit.
+        Remember you can reset all of your Tweets to the originals by clicking the Reset Tweets button on the profiles
+        page.
+        <br>
+        <br>
+        To get more information on why a Tweet has been classified the way it is, click Explain. This may take a few
+        seconds to load.
+<br>
+<div style="text-align:left;font-size:16px;">
+        <form action="{% url 'twitter:lime_edited' username attr %}" method="post">
+        {% csrf_token %}
+    {% for field in form; score in scores %}
+    Tweet:<br>
+        {{field}}
+    <div style="text-align:left;font-size:16px;column-count:3">
+        {% if is_categorical %}
+        <div style="break-after:column;font-size:16px;">Probability of {{target|title}}:
+            {% float_to_percent score %}</div>
+        {% else %}
+            <div style="break-after:column;font-size:16px;">Predicted Income:
+            {% float_to_currency score %}</div>
+        {% endif %}
+        <div style="break-after:column;font-size:16px;">
+            <button class="submit_button" style="position:relative;bottom:2px;" name='tweet' value={{forloop.counter}}>
+                Explain </button></div>
+        </div>
+    <br>
+    <hr>
+
+    {% endfor %}
+            <input type="hidden" name="target" value="{{ target }}">
+             <input type="hidden" name="start_index" value="{{ start_index }}">
+            {% if start_index != 0 %}
+            <button class="submit_button" style="position:relative;bottom:2px;" name='prev' value={{start_index}}>
+                Previous ten Tweets </button>
+            {% endif %}
+            <button class="submit_button" style="position:relative;bottom:2px;" name='profile'>See my profiles</button>
+            {% if start_index < 19 %}
+            <button class="submit_button" style="position:relative;bottom:2px;" name='next' value={{start_index}}>
+                Next ten Tweets</button>
+            {% endif %}
+    </form>
+    </div>
+</body>

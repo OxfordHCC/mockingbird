@@ -1,0 +1,130 @@
+input[type=text_form] {
+  width: 30%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 10px;
+}
+
+input[type=integer_form] {
+  width: 5%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 10px;
+}
+
+.submit_button {
+  background-color: #1da1f2;
+  border: none;
+  font-size: 16px;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 12px 12px;
+  cursor: pointer;
+}
+
+body {
+  background-color: LightBlue;
+  text-align: center;
+  font-family: "Verdana", Times, serif !important;
+}
+
+div {
+  font-size: 30px;
+  position: relative
+  top: 10px
+}
+
+.profile {
+  font-size: 16px;
+  column-rule: 40px gray;
+  break-after: column;
+}
+
+.tweet_list {
+  text-align: left;
+  font-size: 16px;
+}
+
+.at_sign {
+  width: 25px;
+  height: 25px;
+  position: relative;
+  top: 5px;
+}
+
+.page_button {
+  background-color: #1da1f2;
+  width: 30%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 10px;
+  margin-left: 12px;
+  margin-top: 80px;
+  margin-right: 12px;
+  margin-bottom: 12px;
+}
+
+.lexicon {
+  column-count: 2;
+  text-align: left;
+  font-size: 16px;
+}
+
+.lex_exp {
+  column-count: 2;
+  text-align: left;
+  font-size: 16px;
+}
+
+.lex_column {
+  text-align: left;
+  font-size: 16px;
+  break-after: column;
+}
+
+textarea {
+  width: 100%;
+  height: 15%;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding: 12px 20px 12px 10px;
+}
+
+.ibm_outer {
+  text-align: left;
+  font-size: 16px;
+  column-count: 2;
+}
+
+.ibm_inner {
+  text-align: left;
+  font-size: 16px;
+  break-after: column;
+}
+
+.lime.text_div {
+    max-height: 300px;
+    flex: 1 0 300px;
+    overflow: visible !important;
+}

@@ -1,0 +1,86 @@
+<head>
+    {% load static %}
+    {% load twitter_tags %}
+    <link rel="stylesheet" type="text/css" href="/static/twitter/style.css?{% now 'U' %}">
+</head>
+
+<body>
+    <div><strong>We were able to generate the following profiles for you:</strong></div>
+    <br>
+    <br>
+    <div class="tweet_list">
+    {% for class in classes %}
+        <h1 style="text-transform:capitalize;">{{class.0.attr_name}}</h1>
+        <div class="profile" style="column-count:{{class|length}};">
+        {% for classifier in class %}
+            <div class="single_profile" style="break-after:column;font-size:16px;">
+                {% if classifier.classifier != 'blob' %}
+            <a style="text-transform:capitalize;"><strong>Classifier Type:</strong> {{classifier.classifier}}</a>
+            <br>
+                {% else %}
+                <a style="text-transform:capitalize;"><strong>Classifier Type:</strong> {{classifier.extra_info}}</a>
+            <br>
+                {% endif %}
+            <a style="text-transform:capitalize;"><strong>Predicted {{classifier.attr_name}}:</strong>
+                {{classifier.predicted_class}}</a>
+            <br>
+            <a style="text-transform:capitalize;"><strong>Prediction Confidence:</strong>
+                {{classifier.confidence_str}}</a>
+            <br>
+            {% if classifier.explanations != '' %}
+                {% for c in classifier.get_class_descriptors %}
+                <a style="text-transform:capitalize;"><strong>{{c}} Words:</strong>
+                    <br>
+                    {% get_explanations classifier forloop.counter False 0 as wordlist%}</a>
+                    {% for word in wordlist %}
+                    {{forloop.counter}}) {{word}}
+                    <br>
+                    {% endfor %}
+                {% endfor %}
+                {% endif %}
+            <br>
+            <br>
+                {% if classifier.classifier == 'lexicon' %}
+                <a class="page_button" href="{% url 'twitter:lex_info' username classifier.attr_name%}">Find Out More</a>
+                {% elif classifier.classifier == 'm3' %}
+                <a class="page_button" href="{% url 'twitter:m3_info' username classifier.attr_name%}">Find Out More</a>
+                {% elif classifier.classifier == 'blob' %}
+                    {% if classifier.extra_info == 'naive bayes classifier' %}
+                    <a class="page_button" href="{% url 'twitter:blob_info' username 'nbc'%}">Find Out More</a>
+                    {% elif classifier.attr_name == 'subjectivity' %}
+                    <a class="page_button" href="{% url 'twitter:blob_info' username 'subjectivity'%}">Find Out More</a>
+                    {% else %}
+                    <a class="page_button" href="{% url 'twitter:blob_info' username 'polarity'%}">Find Out More</a>
+                    {% endif %}
+                {% elif classifier.extra_info == 'clf' %}
+                    <a class="page_button" href="{% url 'twitter:clf_info' username classifier.attr_name%}">Find Out More</a>
+                {% endif %}
+                <br>
+                <br>
+            </div>
+        {% endfor %}
+        </div>
+        <br>
+        <br>
+    {% endfor %}
+    </div>
+
+    <h1 style="text-transform:capitalize;text-align:left;">Big Five Personality</h1>
+    <div style="text-transform:capitalize;text-align:left;font-size:16px;"><strong>Classifier Type:</strong>
+        IBM Personality Insights</div>
+    <div class="profile" style="text-align:left;">
+            {% for class in ibm %}
+            <a style="text-transform:capitalize;"><strong>Predicted {{class.attr_name}} Percentile:</strong>
+                {{class.confidence_str}} ({{class.predicted_class}})</a>
+            <br>
+            {%endfor%}
+        <br>
+        <br>
+        <a class="page_button" href="{% url 'twitter:ibm_info' username%}">Find Out More</a>
+    </div>
+    <br>
+    <br>
+
+<a class="page_button" href="{% url 'twitter:tweets' username%}">Take me to my Tweets</a>
+<a class="page_button" href="{% url 'twitter:reset_tweets' username%}">Reset all Tweets</a>
+</body>

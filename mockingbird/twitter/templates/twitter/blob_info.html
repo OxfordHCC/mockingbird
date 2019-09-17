@@ -1,0 +1,118 @@
+<head>
+    {% load static %}
+    {% load multifor %}
+    {% load twitter_tags %}
+    <link rel="stylesheet" type="text/css" href="/static/twitter/style.css?{% now 'U' %}">
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-1.2.0.min.js"></script>
+    {{script|safe}}
+</head>
+<body>
+    {% if attr == 'polarity' %}
+    <div><strong>Text Sentiment (Pattern)</strong></div>
+    {% elif attr == 'nbc' %}
+    <div><strong>Text Sentiment (Naive Bayes Classifier)</strong></div>
+    {% else %}
+    <div><strong>Text Subjectivity</strong></div>
+    {% endif %}
+    <br>
+        <div class="lexicon">
+        <div class="lex_column">
+    {{paragraphs.0}}
+    <br>
+            <br>
+        {{paragraphs.1}}
+            </div>
+    <div class="class_plot" align="center" style="font-size:5px;">{{ div|safe }}</div>
+    </div>
+    <br>
+    <br>
+        {% if attr == 'nbc' %}
+    <strong>Confidence That Your Profile is Positive: {% float_to_percent classifier.class_confidence %}</strong>
+        <br>
+        <br>
+    <br>
+    {% endif %}
+    <a class="page_button" href="{% url 'twitter:profile' username%}">Take me back to my profiles</a>
+    <br>
+    <br>
+    {% if attr == 'nbc' %}
+    <span>Click this button to generate an explanation for your profile. This may take several minutes.</span>
+    <a class="page_button" href="{% url 'twitter:lime_explain_all' username attr %}">Explain my profile</a>
+    {% endif %}
+    <br>
+    <br>
+    <br>
+    <div style="font-size:16px;text-align:left;">
+    {{paragraphs.2}}
+    </div>
+    <br>
+        <div class="lex_exp">
+        <div class="lex_column">
+            {% if attr != 'nbc' %}
+        <strong>{{adjs.4|title}} Words with Weights:</strong>
+        <br>
+        {% get_explanations classifier 1 True dec as wordlist%}
+        {% for word in wordlist %}
+        {{forloop.counter}}) {{word.0}}, {{word.1}}
+        <br>
+        {% endfor %}
+            {% endif %}
+        <br>
+        <strong>{{adjs.4|title}} Tweets:</strong>
+        <br>
+        {% order_and_return classifier 5 as tweet_list %}
+        {% for tweet in tweet_list|slice:":5" %}
+            {% autoescape off %}
+        {% add_tag tweet.0 tweet.1 'strong' as to_print%}
+        {{forloop.counter}}) {{to_print}}
+            {% endautoescape %}
+        <br>
+        {% endfor %}
+        <br>
+            <br>
+        <br>
+            {% if attr != 'nbc' %}
+        <a class="page_button" href="{% url 'twitter:lex_edit' username attr adjs.0 %}">Make my profile {{adjs.2}}</a>
+            <br>
+            <br>
+            {% else %}
+            <a class="page_button" href="{% url 'twitter:lime_edit' username attr adjs.0 %}">Make my profile {{adjs.2}}</a>
+            <br>
+            <br>
+            {% endif %}
+        </div>
+            {% if attr != 'nbc' %}
+        <strong>{{adjs.5|title}} Words with Weights:</strong>
+        <br>
+        {% get_explanations classifier 2 True dec as wordlist%}
+        {% for word in wordlist %}
+        {{forloop.counter}}) {{word.0}}, {{word.1}}
+        <br>
+        {% endfor %}
+            {% endif %}
+        <br>
+        <strong>{{adjs.5|title}} Tweets:</strong>
+        <br>
+        {% order_and_return classifier 5 as tweet_list %}
+        {% for tweet in tweet_list|slice:"-5:" reversed %}
+        {% autoescape off %}
+        {% add_tag tweet.0 tweet.1 'strong' as to_print%}
+        {{forloop.counter}}) {{to_print}}
+        {% endautoescape %}
+        <br>
+        {% endfor %}
+        <br>
+        <br>
+            {% if attr != 'nbc' %}
+        <a class="page_button" href="{% url 'twitter:lex_edit' username attr adjs.1 %}">Make my profile {{adjs.3}}</a>
+        <br>
+        <br>
+            {% else %}
+            <a class="page_button" href="{% url 'twitter:lime_edit' username attr adjs.1 %}">Make my profile {{adjs.3}}</a>
+            {% endif %}
+    </div>
+    <br>
+    <br>
+    <br>
+    <a class="page_button" href="{% url 'twitter:profile' username%}">Take me back to my profiles</a>
+</body>

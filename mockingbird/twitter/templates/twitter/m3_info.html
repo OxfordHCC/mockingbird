@@ -1,0 +1,35 @@
+<head>
+    {% load static %}
+    {% load multifor %}
+    <link rel="stylesheet" type="text/css" href="/static/twitter/style.css?{% now 'U' %}">
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-1.2.0.min.js"></script>
+    {{script|safe}}
+</head>
+<body>
+    <div><strong>{{attr|capfirst}} (M3 Classifier)</strong></div>
+    <br>
+        <div class="lexicon">
+        <div class="lex_column">
+    {{paragraphs.0}}
+    <br>
+            <br>
+        {{paragraphs.1}}
+            </div>
+    <div class="class_plot" align="center" style="font-size:5px;">{{ div|safe }}</div>
+    </div>
+    <br>
+    <br>
+    <strong>Your Predicted {{attr|capfirst}}: {{classifier.predicted_class|title}}</strong>
+        <br>
+        <br>
+<!--    <br>-->
+<!--    <br>-->
+<!--    <span>Click this button to generate an explanation for your profile. This may take several minutes.</span>-->
+<!--    <a class="page_button" href="{% url 'twitter:lime_explain_all' username attr %}">Explain my profile</a>-->
+    <br>
+    <div style="font-size:16px;text-align:left;">
+    {{paragraphs.2}}
+    </div>
+    <br>
+    <a class="page_button" href="{% url 'twitter:profile' username%}">Take me back to my profiles</a>
+</body>

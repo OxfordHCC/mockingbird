@@ -1,0 +1,88 @@
+<head>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="/static/twitter/style.css?{% now 'U' %}">
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-1.2.0.min.js"></script>
+    {{script|safe}}
+    {% load twitter_tags %}
+</head>
+<body>
+    <div><strong>{{name|capfirst}} Lexicon</strong></div>
+    <br>
+    <div class="lexicon">
+        <div class="lex_column">
+    {{paragraphs.0}}
+    <br>
+        {{paragraphs.1}}
+            </div>
+    <div class="class_plot" align="center" style="font-size:5px;">{{ div|safe }}</div>
+    </div>
+    <br>
+    <br>
+        <strong>Your Predicted {{attr|capfirst}}: {{classifier.predicted_class|title}}</strong>
+        <br>
+        <br>
+    <a class="page_button" href="{% url 'twitter:profile' username%}">Take me back to my profiles</a>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div style="text-align:left;font-size:16px;">
+        {{paragraphs.2}}
+        </div>
+    <br>
+    <br>
+    <div class="lex_exp">
+        <div class="lex_column">
+        <strong>{{adjs.4|title}} Words with Weights:</strong>
+        <br>
+        {% get_explanations classifier 1 True dec as wordlist%}
+        {% for word in wordlist %}
+        {{forloop.counter}}) {{word.0}}, {{word.1}}
+        <br>
+        {% endfor %}
+        <br>
+        <strong>{{adjs.4|title}} Tweets:</strong>
+        <br>
+        {% order_and_return classifier 2 as tweet_list %}
+        {% for tweet in tweet_list|slice:":5" %}
+            {% autoescape off %}
+        {% add_tag tweet.0 tweet.1 'strong' as to_print%}
+        {{forloop.counter}}) {{to_print}}
+            {% endautoescape %}
+        <br>
+        {% endfor %}
+        <br>
+            <br>
+        <br>
+        <a class="page_button" href="{% url 'twitter:lex_edit' username attr adjs.0 %}">Make my profile {{adjs.2}}</a>
+            <br>
+            <br>
+        </div>
+        <strong>{{adjs.5|title}} Words with Weights:</strong>
+        <br>
+        {% get_explanations classifier 2 True dec as wordlist%}
+        {% for word in wordlist %}
+        {{forloop.counter}}) {{word.0}}, {{word.1}}
+        <br>
+        {% endfor %}
+        <br>
+        <strong>{{adjs.5|title}} Tweets:</strong>
+        <br>
+        {% order_and_return classifier 2 as tweet_list %}
+        {% for tweet in tweet_list|slice:"-5:" reversed %}
+        {% autoescape off %}
+        {% add_tag tweet.0 tweet.1 'strong' as to_print%}
+        {{forloop.counter}}) {{to_print}}
+        {% endautoescape %}
+        <br>
+        {% endfor %}
+        <br>
+        <br>
+        <a class="page_button" href="{% url 'twitter:lex_edit' username attr adjs.1 %}">Make my profile {{adjs.3}}</a>
+        <br>
+        <br>
+    </div>
+    <br>
+    <br>
+<a class="page_button" href="{% url 'twitter:profile' username%}">Take me back to my profiles</a>
+</body>

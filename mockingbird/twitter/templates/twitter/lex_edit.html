@@ -1,0 +1,94 @@
+<head>
+    {% load multifor %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="/static/twitter/style.css?{% now 'U' %}">
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-1.2.0.min.js"></script>
+    {{script|safe}}
+    {% load twitter_tags %}
+</head>
+<body>
+        <div><strong>Making your profile look {{target}}</strong></div>
+        <br>
+<div style="text-align:left;font-size:16px;column-count:3">
+    <div style="break-after:column;font-size:16px;">
+    <strong>Current Class:</strong> {{original_profile.predicted_class|capfirst}}
+    <br>
+    <strong>Current Class Value:</strong> {{original_profile.class_confidence|floatformat:'2'}}
+        </div>
+    <div style="break-after:column;font-size:16px;">
+        {% get_global_explanations original_profile opp_index False 2 as avoid %}
+        Avoid words like:
+        {{avoid|join:", "}}
+    </div>
+    <div style="break-after:column;font-size:16px;">
+        {% get_global_explanations original_profile target_index False 2 as targ %}
+        Try to use more words like: {{targ|join:", "}}
+    </div>
+</div>
+<br>
+Edit your Tweets below! To remove a Tweet entirely, just leave that section blank. Click submit to see your new {{attr}}
+        profile. Click Next ten Tweets or Previous ten Tweets to submit these changes and load more Tweets to edit.
+        Remember you can reset all of your Tweets to the originals by clicking the Reset Tweets button on the profiles
+        page.
+        <br>
+        <br>
+        <strong>General Tips:</strong> Your profile is based on a dictionary, so try removing or misspelling words. You
+        can also try adding spaces, periods, or other symbols in the middle of words. Using synonyms, slang, or emojis
+        may also be an effective way to change your profile.
+        {% if attr == 'gender' or attr == 'age' %}
+        <br>
+        <br>
+        <strong>About Translations:</strong> The translations provided here come from a research paper which tries to
+        "translate" text from one style to another, sort of like translating words from one language to another. It was
+        trained on blog data, and so sometimes suggests offensive language. It is designed for single, short sentences
+        and may have trouble translating longer Tweets. The tag 'NUM' represents a number and periods often indicate
+        removed words. This is best used as a general suggestion of which words to change or remove from the original
+        Tweet.
+        {% endif %}
+<br>
+<div style="text-align:left;font-size:16px;">
+        <form action="{% url 'twitter:lex_edited' username attr %}" method="post">
+        {% csrf_token %}
+            {% if attr == 'gender' or attr == 'age' %}
+    {% for field in form; score in scores; word in words; s in syns; t in translations %}
+    Tweet:<br>
+        {{field}}
+    <div style="text-align:left;font-size:16px;column-count:3">
+        <div style="break-after:column;font-size:16px;">Score: {{score}}</div>
+            <div style="break-after:column;font-size:16px;">Most Important Words: {{word|join:", "}}</div>
+            <div style="break-after:column;font-size:16px;">Suggested Synonyms: {{s|join:", "}}</div>
+        </div>
+            <br>
+            <div style="font-size:16px;">Translated Sentence: {{t}}</div>
+    <br>
+    <hr>
+
+    {% endfor %}
+            {% else %}
+                {% for field in form; score in scores; word in words; s in syns %}
+    Tweet:<br>
+        {{field}}
+    <div style="text-align:left;font-size:16px;column-count:3">
+        <div style="break-after:column;font-size:16px;">Score: {{score}}</div>
+            <div style="break-after:column;font-size:16px;">Most Important Words: {{word|join:", "}}</div>
+            <div style="break-after:column;font-size:16px;">Suggested Synonyms: {{s|join:", "}}</div>
+        </div>
+    <br>
+    <hr>
+
+    {% endfor %}
+            {% endif %}
+            <input type="hidden" name="target" value="{{ target }}">
+            <input type="hidden" name="start_index" value="{{ start_index }}">
+            {% if start_index != 0 %}
+            <button class="submit_button" style="position:relative;bottom:2px;" name='prev'>
+                Previous ten Tweets </button>
+            {% endif %}
+            <button class="submit_button" style="position:relative;bottom:2px;" name='profile'>See my profiles</button>
+            {% if start_index < 19 %}
+            <button class="submit_button" style="position:relative;bottom:2px;" name='next'>
+                Next ten Tweets</button>
+            {% endif %}
+    </form>
+    </div>
+</body>
