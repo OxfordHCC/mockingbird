@@ -5,4 +5,4 @@ The directory `mockingbird` contains the code used to build the Mockingbird tool
 
 The directory `docs` includes several documents relevant to the project, including a pdf of the final report.
 
-The directory `models` includes a few files outlining how the various neural networks were trained and some of the code used to adapt the A^4NT model, the original code for which is available [here](https://github.com/rakshithShetty/A4NT-author-masking).
+The directory `models` includes a few files outlining how the various neural networks were trained and some of the code used to adapt the A<sup>4</sup>NT model, the original code for which is available [here](https://github.com/rakshithShetty/A4NT-author-masking).
